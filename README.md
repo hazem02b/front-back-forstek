@@ -1,36 +1,117 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🎓 Forstek - Plateforme de Stages pour Étudiants Tunisiens
 
-## Getting Started
+Plateforme web moderne connectant les étudiants tunisiens avec des opportunités de stages et de mentorat.
 
-First, run the development server:
+## ✨ Fonctionnalités
 
+- 🏠 **Page d'accueil** : Présentation de la plateforme
+- 🔐 **Authentification** : Connexion et inscription (Étudiant/Entreprise)
+- 💼 **Offres de stage** : Recherche et filtrage d'opportunités
+- 📊 **Dashboard** : Suivi des candidatures et statistiques
+- 👤 **Profil** : Gestion du profil et compétences
+- 💬 **Forum** : Discussions communautaires
+- 🎯 **Mentorat** : Connexion avec des mentors professionnels
+- ℹ️ **À propos** : Histoire et équipe de Forstek
+- 📞 **Contact** : Formulaire de contact et informations
+
+## 🚀 Installation Rapide
+
+### 1️⃣ Cloner le repository
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/hazem02b/front-end.git
+cd front-end
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2️⃣ Installer les dépendances
+```bash
+npm install
+```
+⚠️ **IMPORTANT** : Cette étape est OBLIGATOIRE après chaque clonage !
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3️⃣ Lancer le serveur
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4️⃣ Ouvrir dans le navigateur
+Visitez : **http://localhost:3000**
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Technologies
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **Next.js 16** (App Router + Turbopack)
+- **TypeScript**
+- **Tailwind CSS v4**
+- **Lucide React** (Icônes)
+- **Framer Motion** (Animations)
+- **Radix UI** (Composants accessibles)
 
-## Deploy on Vercel
+## 📁 Structure du Projet
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+front-end/
+├── app/                    # Pages (Next.js App Router)
+│   ├── page.tsx           # Accueil
+│   ├── login/             # Connexion
+│   ├── register/          # Inscription
+│   ├── offres/            # Offres de stage
+│   ├── dashboard/         # Tableau de bord
+│   ├── profile/           # Profil
+│   ├── forum/             # Forum
+│   ├── mentorship/        # Mentorat
+│   ├── about/             # À propos
+│   └── contact/           # Contact
+├── components/            # Composants réutilisables
+│   ├── Navbar.tsx
+│   ├── ModernBackground.tsx
+│   └── ui/                # Composants UI
+└── public/                # Assets statiques
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 Commandes Disponibles
+
+| Commande | Description |
+|----------|-------------|
+| `npm run dev` | Serveur de développement |
+| `npm run build` | Build de production |
+| `npm start` | Lancer la production |
+| `npm run lint` | Vérifier le code |
+
+## ⚠️ Pourquoi `npm install` est nécessaire ?
+
+Le dossier **`node_modules`** (contenant ~428 packages) n'est **PAS** inclus dans Git car :
+- Il pèse environ **500 MB**
+- Il est listé dans `.gitignore`
+- Il doit être généré localement via `npm install`
+
+**Sans cette étape, le site ne fonctionnera pas !**
+
+## 🐛 Problèmes Courants
+
+### ❌ Le serveur ne démarre pas
+```bash
+# Solution 1 : Réinstaller les dépendances
+rm -rf node_modules package-lock.json
+npm install
+
+# Solution 2 : Vérifier Node.js
+node --version  # Doit être >= 18.0.0
+```
+
+### ❌ Port 3000 occupé
+Next.js choisira automatiquement un port libre (3001, 3002...)
+
+### ❌ Erreurs de compilation
+Assurez-vous d'avoir bien exécuté `npm install`
+
+## 📖 Documentation Complète
+
+Pour plus de détails, consultez [INSTALLATION.md](./INSTALLATION.md)
+
+## 🔐 Configuration Git (pour les contributeurs)
+
+```bash
+git config user.name "Votre Nom"
+git config user.email "votre@email.com"
+```
