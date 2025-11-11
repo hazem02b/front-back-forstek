@@ -1,25 +1,46 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, Mail, Lock, Eye, EyeOff, Github, Chrome } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     email: '',
-    password: ''
+    password: '',
+    rememberMe: false
   });
+  
+  const { login } = useAuth();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Login:', formData);
-    // TODO: Implement authentication logic
-    // Redirect to dashboard after login
-    window.location.href = '/dashboard';
+    setError('');
+    setLoading(true);
+
+    try {
+      const success = await login(formData.email, formData.password);
+      
+      if (success) {
+        // Connexion réussie
+        router.push('/dashboard');
+      } else {
+        setError('Email ou mot de passe incorrect');
+      }
+    } catch (err) {
+      setError('Une erreur est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -98,6 +119,12 @@ export default function LoginPage() {
 
             {/* Email/Password Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label className="text-white text-sm font-medium mb-2 block">Email</label>
                 <div className="relative">
@@ -138,7 +165,9 @@ export default function LoginPage() {
               <div className="flex items-center justify-between">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input 
-                    type="checkbox" 
+                    type="checkbox"
+                    checked={formData.rememberMe}
+                    onChange={(e) => setFormData({ ...formData, rememberMe: e.target.checked })}
                     className="w-4 h-4 rounded border-white/20 bg-white/5 text-[#2563EB] focus:ring-[#2563EB]/20"
                   />
                   <span className="text-sm text-gray-400">Se souvenir de moi</span>
@@ -150,9 +179,10 @@ export default function LoginPage() {
 
               <Button 
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50 hover:shadow-xl hover:shadow-[#2563EB]/60 transition-all text-base group"
+                disabled={loading}
+                className="w-full h-12 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50 hover:shadow-xl hover:shadow-[#2563EB]/60 transition-all text-base group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Se connecter
+                {loading ? 'Connexion...' : 'Se connecter'}
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </form>

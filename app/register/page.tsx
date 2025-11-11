@@ -1,33 +1,65 @@
 "use client";
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { ArrowRight, Mail, Lock, User, Eye, EyeOff, Github, Chrome, GraduationCap, Briefcase } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ModernBackground from '@/components/ModernBackground';
 import FloatingParticles from '@/components/FloatingParticles';
 import Link from 'next/link';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function RegisterPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [accountType, setAccountType] = useState<'student' | 'company'>('student');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     fullName: '',
     email: '',
     password: '',
     confirmPassword: ''
   });
+  
+  const { register } = useAuth();
+  const router = useRouter();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    
     if (formData.password !== formData.confirmPassword) {
-      alert('Les mots de passe ne correspondent pas');
+      setError('Les mots de passe ne correspondent pas');
       return;
     }
-    console.log('Register:', { ...formData, accountType });
-    // TODO: Implement registration logic
-    // Redirect to dashboard after registration
-    window.location.href = '/dashboard';
+    
+    if (formData.password.length < 6) {
+      setError('Le mot de passe doit contenir au moins 6 caractères');
+      return;
+    }
+    
+    setLoading(true);
+
+    try {
+      const success = await register(
+        formData.email, 
+        formData.password, 
+        formData.fullName, 
+        accountType
+      );
+      
+      if (success) {
+        // Inscription réussie
+        router.push('/dashboard');
+      } else {
+        setError('Cet email est déjà utilisé');
+      }
+    } catch (err) {
+      setError('Une erreur est survenue');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -140,6 +172,12 @@ export default function RegisterPage() {
 
             {/* Registration Form */}
             <form onSubmit={handleSubmit} className="space-y-6">
+              {error && (
+                <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
+                  {error}
+                </div>
+              )}
+              
               <div>
                 <label className="text-white text-sm font-medium mb-2 block">Nom complet</label>
                 <div className="relative">
@@ -237,9 +275,10 @@ export default function RegisterPage() {
 
               <Button 
                 type="submit"
-                className="w-full h-12 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50 hover:shadow-xl hover:shadow-[#2563EB]/60 transition-all text-base group"
+                disabled={loading}
+                className="w-full h-12 bg-gradient-to-r from-[#2563EB] to-[#1D4ED8] hover:from-[#1D4ED8] hover:to-[#2563EB] text-white border-none shadow-lg shadow-[#2563EB]/50 hover:shadow-xl hover:shadow-[#2563EB]/60 transition-all text-base group disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Créer mon compte
+                {loading ? 'Création du compte...' : 'Créer mon compte'}
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
               </Button>
             </form>
