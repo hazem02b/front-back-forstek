@@ -370,7 +370,7 @@ export default function Home() {
             <div className="md:col-span-2">
               <div className="flex items-center gap-3 mb-4">
                 <img 
-                  src="/logo.png" 
+                  src="/logo.svg" 
                   alt="Forstek Logo" 
                   className="h-10 w-10 rounded-xl"
                 />
